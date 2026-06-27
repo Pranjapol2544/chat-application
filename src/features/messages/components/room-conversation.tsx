@@ -20,6 +20,7 @@ interface RoomConversationProps {
   initialMessages: RoomMessage[];
   roomId: string;
   roomName: string;
+  socketAuthToken: string;
 }
 
 const upsertMessages = (messages: RoomMessage[], nextMessage: RoomMessage) => {
@@ -33,12 +34,12 @@ const upsertMessages = (messages: RoomMessage[], nextMessage: RoomMessage) => {
 };
 
 export const RoomConversation = (props: RoomConversationProps) => {
-  const { currentUserId, initialMessages, roomId, roomName } = props;
+  const { currentUserId, initialMessages, roomId, roomName, socketAuthToken } = props;
   const [messages, setMessages] = useState(initialMessages);
   const [rootError, setRootError] = useState('');
   const [isPending, startTransition] = useTransition();
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
-  const socket = useMemo(() => getSocket(), []);
+  const socket = useMemo(() => getSocket(socketAuthToken), [socketAuthToken]);
   const {
     register,
     handleSubmit,
@@ -57,9 +58,17 @@ export const RoomConversation = (props: RoomConversationProps) => {
   }, [messages]);
 
   useEffect(() => {
-    socket.connect();
+    const joinRoom = () => {
+      socket.emit('room:join', { roomId }, (response) => {
+        if (!response.ok) {
+          setRootError(response.message ?? t('messages.errors.sendFailed'));
+        }
+      });
+    };
 
-    socket.emit('room:join', { roomId });
+    const handleConnect = () => {
+      joinRoom();
+    };
 
     const handleMessageCreated = (message: RoomMessage) => {
       if (message.roomId !== roomId) {
@@ -69,13 +78,23 @@ export const RoomConversation = (props: RoomConversationProps) => {
       setMessages((currentMessages) => upsertMessages(currentMessages, message));
     };
 
+    socket.on('connect', handleConnect);
     socket.on('message:created', handleMessageCreated);
+    socket.connect();
+
+    if (socket.connected) {
+      joinRoom();
+    }
 
     return () => {
-      socket.emit('room:leave', { roomId });
+      if (socket.connected) {
+        socket.emit('room:leave', { roomId });
+      }
+
+      socket.off('connect', handleConnect);
       socket.off('message:created', handleMessageCreated);
     };
-  }, [roomId, socket]);
+  }, [roomId, socket, socketAuthToken]);
 
   const onSubmit = (values: SendMessageInput) => {
     setRootError('');
@@ -90,6 +109,21 @@ export const RoomConversation = (props: RoomConversationProps) => {
 
       if (response.payload) {
         setMessages((currentMessages) => upsertMessages(currentMessages, response.payload!));
+
+        if (socket.connected) {
+          socket.emit(
+            'message:publish',
+            {
+              messageId: response.payload.id,
+              roomId,
+            },
+            (publishResponse) => {
+              if (!publishResponse.ok) {
+                setRootError(publishResponse.message ?? t('messages.errors.sendFailed'));
+              }
+            },
+          );
+        }
       }
 
       reset({ roomId, content: '' });

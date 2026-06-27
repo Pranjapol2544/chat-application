@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { RoomConversation } from '@/features/messages/components/room-conversation';
 import { listRoomMessages } from '@/features/messages/server/list-room-messages';
 import { getRoomForUser } from '@/features/rooms/server/get-room-for-user';
+import { createSocketToken } from '@/server/auth/socket-token';
 import { getRequiredSession } from '@/server/auth/session';
 
 interface RoomPageProps {
@@ -21,6 +22,10 @@ export default async function RoomPage({ params }: RoomPageProps) {
   }
 
   const messages = await listRoomMessages(room.id);
+  const socketAuthToken = await createSocketToken({
+    userId: session.user.id,
+    username: session.user.username,
+  });
 
   return (
     <RoomConversation
@@ -28,6 +33,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
       initialMessages={messages}
       roomId={room.id}
       roomName={room.name}
+      socketAuthToken={socketAuthToken}
     />
   );
 }
