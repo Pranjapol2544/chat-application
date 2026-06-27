@@ -5,6 +5,7 @@ export const roomsTh: LocaleMessages<typeof roomsEn> = {
   'rooms.page.eyebrow': 'Room Chat',
   'rooms.page.emptyTitle': 'คุณพร้อมเริ่มห้องแรกแล้ว',
   'rooms.page.emptyDescription': 'ใช้แถบด้านข้างเพื่อสร้างห้องหรือเข้าร่วมห้องที่มีอยู่แล้ว',
+  'rooms.page.emptyAction': 'เลือกห้องจากรายการหรือสร้างห้องใหม่เพื่อเริ่มต้นได้เลย',
   'rooms.sidebar.signedInAs': 'ลงชื่อเข้าใช้เป็น',
   'rooms.sidebar.yourRooms': 'ห้องของคุณ',
   'rooms.sidebar.availableRooms': 'ห้องที่เข้าร่วมได้',

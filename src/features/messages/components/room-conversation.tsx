@@ -1,6 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -131,15 +133,24 @@ export const RoomConversation = (props: RoomConversationProps) => {
   };
 
   return (
-    <section className="flex h-full flex-col rounded-[2rem] border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
-      <header className="border-b border-zinc-200 px-8 py-6">
+    <section className="flex min-h-[calc(100dvh-1.5rem)] flex-col overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5 sm:min-h-[calc(100dvh-2rem)] lg:h-full lg:min-h-0">
+      <header className="border-b border-zinc-200 px-5 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6">
+        <Link
+          href="/rooms"
+          className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-zinc-600 transition hover:text-zinc-950 lg:hidden"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          <span>{t('rooms.notFound.backToRooms')}</span>
+        </Link>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
           {t('messages.room.eyebrow')}
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950">{roomName}</h1>
+        <h1 className="mt-2 break-words text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl">
+          {roomName}
+        </h1>
       </header>
 
-      <div className="flex-1 space-y-4 overflow-y-auto px-6 py-6 md:px-8">
+      <div className="flex-1 space-y-4 overflow-y-auto px-4 py-5 sm:px-5 md:px-8">
         {messages.length ? (
           messages.map((message) => {
             const isCurrentUser = message.sender.id === currentUserId;
@@ -151,18 +162,22 @@ export const RoomConversation = (props: RoomConversationProps) => {
               >
                 <div
                   className={cn(
-                    'max-w-xl rounded-3xl px-4 py-3 shadow-sm',
+                    'max-w-[88%] rounded-3xl px-4 py-3 shadow-sm sm:max-w-xl',
                     isCurrentUser
                       ? 'bg-zinc-950 text-white'
                       : 'border border-zinc-200 bg-zinc-50 text-zinc-950',
                   )}
                 >
                   <div className="mb-2 flex items-center gap-2 text-xs font-medium opacity-80">
-                    <span>{message.sender.username}</span>
+                    <span className="max-w-[9rem] truncate sm:max-w-none">
+                      {message.sender.username}
+                    </span>
                     <span>•</span>
                     <span>{formatChatTime(message.createdAt)}</span>
                   </div>
-                  <p className="whitespace-pre-wrap text-sm leading-6">{message.content}</p>
+                  <p className="whitespace-pre-wrap break-words text-sm leading-6">
+                    {message.content}
+                  </p>
                 </div>
               </article>
             );
@@ -175,7 +190,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
         <div ref={endOfMessagesRef} />
       </div>
 
-      <div className="border-t border-zinc-200 px-6 py-5 md:px-8">
+      <div className="border-t border-zinc-200 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 md:px-8">
         {rootError ? (
           <div className="mb-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
             {rootError}
@@ -208,7 +223,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
           <button
             type="submit"
             disabled={isPending}
-            className="rounded-3xl bg-zinc-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-3xl bg-zinc-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
           >
             {isPending ? t('messages.composer.submitting') : t('messages.composer.submit')}
           </button>

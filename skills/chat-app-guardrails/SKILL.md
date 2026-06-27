@@ -74,6 +74,7 @@ Read [references/performance-security.md](references/performance-security.md) wh
 - Keep shared UI primitives reusable and feature UI specific to its domain.
 - Use Tailwind utilities consistently; extract helpers or components only when repetition becomes meaningful.
 - Preserve responsive behavior for room lists, message panes, and composer interactions.
+- Prefer a single-pane mobile chat flow and a two-pane desktop chat flow unless a feature explicitly needs a different navigation model.
 
 ## Code Style
 

@@ -3,6 +3,7 @@ export const roomsEn = {
   'rooms.page.emptyTitle': 'You are ready to start your first room',
   'rooms.page.emptyDescription':
     'Use the sidebar to create a room or join one that already exists.',
+  'rooms.page.emptyAction': 'Choose a room from the list or create a fresh one to get started.',
   'rooms.sidebar.signedInAs': 'Signed in as',
   'rooms.sidebar.yourRooms': 'Your rooms',
   'rooms.sidebar.availableRooms': 'Available rooms',
