@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 
 import { registerSchema, type RegisterInput } from '@/features/auth/schemas/register.schema';
+import { t } from '@/locales';
 import { hashPassword } from '@/server/auth/password';
 import { prisma } from '@/server/db/prisma';
 
@@ -17,7 +18,7 @@ export const registerUser = async (input: RegisterInput): Promise<RegisterAction
   if (!result.success) {
     return {
       status: 'error',
-      message: result.error.issues[0]?.message ?? 'Invalid registration details.',
+      message: result.error.issues[0]?.message ?? t('auth.errors.invalidRegistrationDetails'),
     };
   }
 
@@ -30,7 +31,7 @@ export const registerUser = async (input: RegisterInput): Promise<RegisterAction
   if (existingUser) {
     return {
       status: 'error',
-      message: 'A user with that email or username already exists.',
+      message: t('auth.errors.userExists'),
     };
   }
 

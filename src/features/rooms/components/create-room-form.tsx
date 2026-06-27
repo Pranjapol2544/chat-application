@@ -10,6 +10,7 @@ import {
 } from '@/features/rooms/schemas/create-room.schema';
 import { createRoom, type RoomActionResult } from '@/features/rooms/server/create-room';
 import { cn } from '@/lib/cn';
+import { t } from '@/locales';
 
 export const CreateRoomForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -41,7 +42,7 @@ export const CreateRoomForm = () => {
     <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
       <label className="block space-y-2">
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
-          Create room
+          {t('rooms.create.label')}
         </span>
         <input
           {...register('name')}
@@ -50,7 +51,7 @@ export const CreateRoomForm = () => {
             'w-full rounded-2xl border bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-950',
             errors.name ? 'border-rose-300' : 'border-zinc-200',
           )}
-          placeholder="Product updates"
+          placeholder={t('rooms.create.placeholder')}
         />
       </label>
       {errors.name ? <p className="text-xs text-rose-600">{errors.name.message}</p> : null}
@@ -60,7 +61,7 @@ export const CreateRoomForm = () => {
         disabled={isPending}
         className="w-full rounded-2xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isPending ? 'Creating...' : 'Create room'}
+        {isPending ? t('rooms.create.submitting') : t('rooms.create.submit')}
       </button>
     </form>
   );

@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 
 import { joinRoom, type JoinRoomResult } from '@/features/rooms/server/join-room';
+import { t } from '@/locales';
 
 interface JoinRoomButtonProps {
   roomId: string;
@@ -33,7 +34,7 @@ export const JoinRoomButton = (props: JoinRoomButtonProps) => {
         onClick={handleJoinRoom}
         className="rounded-full border border-zinc-200 px-3 py-1.5 text-xs font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isPending ? 'Joining...' : 'Join'}
+        {isPending ? t('rooms.join.submitting') : t('rooms.join.submit')}
       </button>
       {errorMessage ? <p className="text-xs text-rose-600">{errorMessage}</p> : null}
     </div>

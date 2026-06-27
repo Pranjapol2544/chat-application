@@ -7,6 +7,7 @@ import {
   createRoomSchema,
   type CreateRoomInput,
 } from '@/features/rooms/schemas/create-room.schema';
+import { t } from '@/locales';
 import { getRequiredSession } from '@/server/auth/session';
 import { prisma } from '@/server/db/prisma';
 
@@ -22,7 +23,7 @@ export const createRoom = async (input: CreateRoomInput): Promise<RoomActionResu
   if (!result.success) {
     return {
       status: 'error',
-      message: result.error.issues[0]?.message ?? 'Invalid room details.',
+      message: result.error.issues[0]?.message ?? t('rooms.errors.invalidRoomDetails'),
     };
   }
 
@@ -35,7 +36,7 @@ export const createRoom = async (input: CreateRoomInput): Promise<RoomActionResu
   if (existingRoom) {
     return {
       status: 'error',
-      message: 'A room with that name already exists.',
+      message: t('rooms.errors.roomExists'),
     };
   }
 

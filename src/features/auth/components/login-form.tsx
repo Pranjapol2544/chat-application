@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 
 import { loginSchema, type LoginInput } from '@/features/auth/schemas/login.schema';
 import { cn } from '@/lib/cn';
+import { t } from '@/locales';
 
 interface LoginFormProps {
   registered?: boolean;
@@ -41,7 +42,7 @@ export const LoginForm = (props: LoginFormProps) => {
       });
 
       if (!response?.ok) {
-        setRootError('Email or password is incorrect.');
+        setRootError(t('auth.login.errorInvalidCredentials'));
         return;
       }
 
@@ -54,17 +55,17 @@ export const LoginForm = (props: LoginFormProps) => {
     <div className="w-full max-w-md rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm shadow-zinc-950/5">
       <div className="mb-8 space-y-2">
         <p className="text-sm font-medium uppercase tracking-[0.22em] text-emerald-700">
-          Room Chat
+          {t('common.app.name')}
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">Welcome back</h1>
-        <p className="text-sm leading-6 text-zinc-600">
-          Sign in to open your rooms and continue the conversation.
-        </p>
+        <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">
+          {t('auth.login.title')}
+        </h1>
+        <p className="text-sm leading-6 text-zinc-600">{t('auth.login.description')}</p>
       </div>
 
       {registered ? (
         <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-          Account created. Sign in with your new credentials.
+          {t('auth.login.successRegistered')}
         </div>
       ) : null}
 
@@ -76,7 +77,7 @@ export const LoginForm = (props: LoginFormProps) => {
 
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-zinc-800">Email</span>
+          <span className="text-sm font-medium text-zinc-800">{t('auth.login.emailLabel')}</span>
           <input
             {...register('email')}
             type="email"
@@ -85,7 +86,7 @@ export const LoginForm = (props: LoginFormProps) => {
               'w-full rounded-2xl border bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-950',
               errors.email ? 'border-rose-300' : 'border-zinc-200',
             )}
-            placeholder="alice@example.com"
+            placeholder={t('auth.login.emailPlaceholder')}
           />
           {errors.email ? (
             <span className="text-xs text-rose-600">{errors.email.message}</span>
@@ -93,7 +94,7 @@ export const LoginForm = (props: LoginFormProps) => {
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-zinc-800">Password</span>
+          <span className="text-sm font-medium text-zinc-800">{t('auth.login.passwordLabel')}</span>
           <input
             {...register('password')}
             type="password"
@@ -102,7 +103,7 @@ export const LoginForm = (props: LoginFormProps) => {
               'w-full rounded-2xl border bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-950',
               errors.password ? 'border-rose-300' : 'border-zinc-200',
             )}
-            placeholder="Enter your password"
+            placeholder={t('auth.login.passwordPlaceholder')}
           />
           {errors.password ? (
             <span className="text-xs text-rose-600">{errors.password.message}</span>
@@ -114,14 +115,14 @@ export const LoginForm = (props: LoginFormProps) => {
           disabled={isPending}
           className="flex w-full items-center justify-center rounded-2xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isPending ? 'Signing in...' : 'Sign in'}
+          {isPending ? t('auth.login.submitting') : t('auth.login.submit')}
         </button>
       </form>
 
       <p className="mt-6 text-sm text-zinc-600">
-        Need an account?{' '}
+        {t('auth.login.registerPrompt')}{' '}
         <Link className="font-semibold text-zinc-950" href="/register">
-          Create one
+          {t('auth.login.registerLink')}
         </Link>
       </p>
     </div>

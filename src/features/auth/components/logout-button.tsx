@@ -2,6 +2,8 @@
 
 import { signOut } from 'next-auth/react';
 
+import { t } from '@/locales';
+
 export const LogoutButton = () => {
   return (
     <button
@@ -9,7 +11,7 @@ export const LogoutButton = () => {
       onClick={() => signOut({ callbackUrl: '/login' })}
       className="rounded-2xl border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950"
     >
-      Sign out
+      {t('auth.logout.submit')}
     </button>
   );
 };

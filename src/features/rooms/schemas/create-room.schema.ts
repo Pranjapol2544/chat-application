@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
+import { t } from '@/locales';
+
 export const createRoomSchema = z.object({
-  name: z
-    .string()
-    .min(2, 'Room name must be at least 2 characters.')
-    .max(50, 'Room name must be at most 50 characters.'),
+  name: z.string().min(2, t('rooms.validation.nameMin')).max(50, t('rooms.validation.nameMax')),
 });
 
 export type CreateRoomInput = z.infer<typeof createRoomSchema>;

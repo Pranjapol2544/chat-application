@@ -12,6 +12,8 @@ import { sendMessage } from '@/features/messages/server/send-message';
 import type { RoomMessage } from '@/features/messages/types/room-message';
 import { cn } from '@/lib/cn';
 import { getSocket } from '@/lib/socket';
+import { t } from '@/locales';
+import { formatChatTime } from '@/locales/formatters';
 
 interface RoomConversationProps {
   currentUserId: string;
@@ -19,13 +21,6 @@ interface RoomConversationProps {
   roomId: string;
   roomName: string;
 }
-
-const formatTimestamp = (value: string) => {
-  return new Intl.DateTimeFormat('en', {
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(value));
-};
 
 const upsertMessages = (messages: RoomMessage[], nextMessage: RoomMessage) => {
   const exists = messages.some((message) => message.id === nextMessage.id);
@@ -89,7 +84,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
       const response = await sendMessage(values);
 
       if (response.status === 'error') {
-        setRootError(response.message ?? 'Unable to send your message.');
+        setRootError(response.message ?? t('messages.errors.sendFailed'));
         return;
       }
 
@@ -104,7 +99,9 @@ export const RoomConversation = (props: RoomConversationProps) => {
   return (
     <section className="flex h-full flex-col rounded-[2rem] border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
       <header className="border-b border-zinc-200 px-8 py-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Room</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
+          {t('messages.room.eyebrow')}
+        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950">{roomName}</h1>
       </header>
 
@@ -129,7 +126,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
                   <div className="mb-2 flex items-center gap-2 text-xs font-medium opacity-80">
                     <span>{message.sender.username}</span>
                     <span>•</span>
-                    <span>{formatTimestamp(message.createdAt)}</span>
+                    <span>{formatChatTime(message.createdAt)}</span>
                   </div>
                   <p className="whitespace-pre-wrap text-sm leading-6">{message.content}</p>
                 </div>
@@ -138,7 +135,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
           })
         ) : (
           <div className="flex h-full items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-zinc-50 px-6 py-16 text-center text-sm leading-6 text-zinc-500">
-            No messages yet. Start the room with the first update.
+            {t('messages.emptyState')}
           </div>
         )}
         <div ref={endOfMessagesRef} />
@@ -157,7 +154,9 @@ export const RoomConversation = (props: RoomConversationProps) => {
         >
           <input {...register('roomId')} type="hidden" value={roomId} />
           <label className="flex-1 space-y-2">
-            <span className="text-sm font-medium text-zinc-700">Message</span>
+            <span className="text-sm font-medium text-zinc-700">
+              {t('messages.composer.label')}
+            </span>
             <textarea
               {...register('content')}
               rows={3}
@@ -165,7 +164,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
                 'w-full resize-none rounded-3xl border bg-white px-4 py-3 text-sm leading-6 text-zinc-950 outline-none transition focus:border-zinc-950',
                 errors.content ? 'border-rose-300' : 'border-zinc-200',
               )}
-              placeholder="Write a message to the room..."
+              placeholder={t('messages.composer.placeholder')}
             />
             {errors.content ? (
               <span className="text-xs text-rose-600">{errors.content.message}</span>
@@ -177,7 +176,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
             disabled={isPending}
             className="rounded-3xl bg-zinc-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isPending ? 'Sending...' : 'Send message'}
+            {isPending ? t('messages.composer.submitting') : t('messages.composer.submit')}
           </button>
         </form>
       </div>

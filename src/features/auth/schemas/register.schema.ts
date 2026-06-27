@@ -1,16 +1,18 @@
 import { z } from 'zod';
 
+import { t } from '@/locales';
+
 export const registerSchema = z.object({
   username: z
     .string()
-    .min(3, 'Username must be at least 3 characters.')
-    .max(32, 'Username must be at most 32 characters.')
-    .regex(/^[a-zA-Z0-9_]+$/, 'Use letters, numbers, or underscores only.'),
-  email: z.string().email('Enter a valid email address.'),
+    .min(3, t('auth.validation.usernameMin'))
+    .max(32, t('auth.validation.usernameMax'))
+    .regex(/^[a-zA-Z0-9_]+$/, t('auth.validation.usernamePattern')),
+  email: z.string().email(t('auth.validation.emailInvalid')),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters.')
-    .max(72, 'Password must be at most 72 characters.'),
+    .min(8, t('auth.validation.passwordMin'))
+    .max(72, t('auth.validation.passwordMax')),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
