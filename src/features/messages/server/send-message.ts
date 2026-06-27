@@ -1,32 +1,30 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
 
 import {
   sendMessageSchema,
   type SendMessageInput,
-} from "@/features/messages/schemas/send-message.schema";
-import type { RoomMessage } from "@/features/messages/types/room-message";
-import { getRequiredSession } from "@/server/auth/session";
-import { prisma } from "@/server/db/prisma";
-import { emitMessageCreated } from "@/server/sockets/socket-server";
+} from '@/features/messages/schemas/send-message.schema';
+import type { RoomMessage } from '@/features/messages/types/room-message';
+import { getRequiredSession } from '@/server/auth/session';
+import { prisma } from '@/server/db/prisma';
+import { emitMessageCreated } from '@/server/sockets/socket-server';
 
 export interface SendMessageResult {
-  status: "error" | "success";
+  status: 'error' | 'success';
   message?: string;
   payload?: RoomMessage;
 }
 
-export const sendMessage = async (
-  input: SendMessageInput,
-): Promise<SendMessageResult> => {
+export const sendMessage = async (input: SendMessageInput): Promise<SendMessageResult> => {
   const session = await getRequiredSession();
   const result = sendMessageSchema.safeParse(input);
 
   if (!result.success) {
     return {
-      status: "error",
-      message: result.error.issues[0]?.message ?? "Invalid message payload.",
+      status: 'error',
+      message: result.error.issues[0]?.message ?? 'Invalid message payload.',
     };
   }
 
@@ -41,8 +39,8 @@ export const sendMessage = async (
 
   if (!membership) {
     return {
-      status: "error",
-      message: "You are not a member of this room.",
+      status: 'error',
+      message: 'You are not a member of this room.',
     };
   }
 
@@ -87,11 +85,11 @@ export const sendMessage = async (
   };
 
   emitMessageCreated(result.data.roomId, payload);
-  revalidatePath("/rooms");
+  revalidatePath('/rooms');
   revalidatePath(`/rooms/${result.data.roomId}`);
 
   return {
-    status: "success",
+    status: 'success',
     payload,
   };
 };

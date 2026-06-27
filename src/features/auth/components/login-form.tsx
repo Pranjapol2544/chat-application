@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { loginSchema, type LoginInput } from "@/features/auth/schemas/login.schema";
-import { cn } from "@/lib/cn";
+import { loginSchema, type LoginInput } from '@/features/auth/schemas/login.schema';
+import { cn } from '@/lib/cn';
 
 interface LoginFormProps {
   registered?: boolean;
@@ -18,7 +18,7 @@ export const LoginForm = (props: LoginFormProps) => {
   const { registered = false } = props;
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [rootError, setRootError] = useState("");
+  const [rootError, setRootError] = useState('');
   const {
     register,
     handleSubmit,
@@ -26,26 +26,26 @@ export const LoginForm = (props: LoginFormProps) => {
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
   const onSubmit = (values: LoginInput) => {
-    setRootError("");
+    setRootError('');
 
     startTransition(async () => {
-      const response = await signIn("credentials", {
+      const response = await signIn('credentials', {
         ...values,
         redirect: false,
       });
 
       if (!response?.ok) {
-        setRootError("Email or password is incorrect.");
+        setRootError('Email or password is incorrect.');
         return;
       }
 
-      router.push("/rooms");
+      router.push('/rooms');
       router.refresh();
     });
   };
@@ -56,9 +56,7 @@ export const LoginForm = (props: LoginFormProps) => {
         <p className="text-sm font-medium uppercase tracking-[0.22em] text-emerald-700">
           Room Chat
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">
-          Welcome back
-        </h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">Welcome back</h1>
         <p className="text-sm leading-6 text-zinc-600">
           Sign in to open your rooms and continue the conversation.
         </p>
@@ -80,12 +78,12 @@ export const LoginForm = (props: LoginFormProps) => {
         <label className="block space-y-2">
           <span className="text-sm font-medium text-zinc-800">Email</span>
           <input
-            {...register("email")}
+            {...register('email')}
             type="email"
             autoComplete="email"
             className={cn(
-              "w-full rounded-2xl border bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-950",
-              errors.email ? "border-rose-300" : "border-zinc-200",
+              'w-full rounded-2xl border bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-950',
+              errors.email ? 'border-rose-300' : 'border-zinc-200',
             )}
             placeholder="alice@example.com"
           />
@@ -97,12 +95,12 @@ export const LoginForm = (props: LoginFormProps) => {
         <label className="block space-y-2">
           <span className="text-sm font-medium text-zinc-800">Password</span>
           <input
-            {...register("password")}
+            {...register('password')}
             type="password"
             autoComplete="current-password"
             className={cn(
-              "w-full rounded-2xl border bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-950",
-              errors.password ? "border-rose-300" : "border-zinc-200",
+              'w-full rounded-2xl border bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-950',
+              errors.password ? 'border-rose-300' : 'border-zinc-200',
             )}
             placeholder="Enter your password"
           />
@@ -116,12 +114,12 @@ export const LoginForm = (props: LoginFormProps) => {
           disabled={isPending}
           className="flex w-full items-center justify-center rounded-2xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isPending ? "Signing in..." : "Sign in"}
+          {isPending ? 'Signing in...' : 'Sign in'}
         </button>
       </form>
 
       <p className="mt-6 text-sm text-zinc-600">
-        Need an account?{" "}
+        Need an account?{' '}
         <Link className="font-semibold text-zinc-950" href="/register">
           Create one
         </Link>

@@ -1,4 +1,4 @@
-import type { RoomMessage } from "@/features/messages/types/room-message";
+import type { RoomMessage } from '@/features/messages/types/room-message';
 
 export interface SocketAck {
   ok: boolean;
@@ -10,18 +10,12 @@ export interface RoomSocketPayload {
 }
 
 export interface ServerToClientEvents {
-  "message:created": (message: RoomMessage) => void;
+  'message:created': (message: RoomMessage) => void;
 }
 
 export interface ClientToServerEvents {
-  "room:join": (
-    payload: RoomSocketPayload,
-    ack?: (response: SocketAck) => void,
-  ) => void;
-  "room:leave": (
-    payload: RoomSocketPayload,
-    ack?: (response: SocketAck) => void,
-  ) => void;
+  'room:join': (payload: RoomSocketPayload, ack?: (response: SocketAck) => void) => void;
+  'room:leave': (payload: RoomSocketPayload, ack?: (response: SocketAck) => void) => void;
 }
 
 export const getRoomChannel = (roomId: string) => {

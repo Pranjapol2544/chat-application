@@ -1,13 +1,10 @@
-import type { RoomMessage } from "@/features/messages/types/room-message";
-import { prisma } from "@/server/db/prisma";
+import type { RoomMessage } from '@/features/messages/types/room-message';
+import { prisma } from '@/server/db/prisma';
 
-export const listRoomMessages = async (
-  roomId: string,
-  limit = 50,
-): Promise<RoomMessage[]> => {
+export const listRoomMessages = async (roomId: string, limit = 50): Promise<RoomMessage[]> => {
   const messages = await prisma.message.findMany({
     where: { roomId },
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: 'asc' },
     take: limit,
     include: {
       sender: {

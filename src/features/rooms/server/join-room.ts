@@ -1,29 +1,27 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
-import { getRequiredSession } from "@/server/auth/session";
-import { prisma } from "@/server/db/prisma";
+import { getRequiredSession } from '@/server/auth/session';
+import { prisma } from '@/server/db/prisma';
 
 export interface JoinRoomInput {
   roomId: string;
 }
 
 export interface JoinRoomResult {
-  status: "error";
+  status: 'error';
   message: string;
 }
 
-export const joinRoom = async ({
-  roomId,
-}: JoinRoomInput): Promise<JoinRoomResult | never> => {
+export const joinRoom = async ({ roomId }: JoinRoomInput): Promise<JoinRoomResult | never> => {
   const session = await getRequiredSession();
 
   if (!roomId) {
     return {
-      status: "error",
-      message: "Select a valid room.",
+      status: 'error',
+      message: 'Select a valid room.',
     };
   }
 
@@ -33,8 +31,8 @@ export const joinRoom = async ({
 
   if (!room) {
     return {
-      status: "error",
-      message: "Room not found.",
+      status: 'error',
+      message: 'Room not found.',
     };
   }
 
@@ -56,6 +54,6 @@ export const joinRoom = async ({
     });
   }
 
-  revalidatePath("/rooms");
+  revalidatePath('/rooms');
   redirect(`/rooms/${roomId}`);
 };

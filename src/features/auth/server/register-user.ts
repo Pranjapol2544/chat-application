@@ -1,25 +1,23 @@
-"use server";
+'use server';
 
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
-import { registerSchema, type RegisterInput } from "@/features/auth/schemas/register.schema";
-import { hashPassword } from "@/server/auth/password";
-import { prisma } from "@/server/db/prisma";
+import { registerSchema, type RegisterInput } from '@/features/auth/schemas/register.schema';
+import { hashPassword } from '@/server/auth/password';
+import { prisma } from '@/server/db/prisma';
 
 export interface RegisterActionResult {
-  status: "error";
+  status: 'error';
   message: string;
 }
 
-export const registerUser = async (
-  input: RegisterInput,
-): Promise<RegisterActionResult | never> => {
+export const registerUser = async (input: RegisterInput): Promise<RegisterActionResult | never> => {
   const result = registerSchema.safeParse(input);
 
   if (!result.success) {
     return {
-      status: "error",
-      message: result.error.issues[0]?.message ?? "Invalid registration details.",
+      status: 'error',
+      message: result.error.issues[0]?.message ?? 'Invalid registration details.',
     };
   }
 
@@ -31,8 +29,8 @@ export const registerUser = async (
 
   if (existingUser) {
     return {
-      status: "error",
-      message: "A user with that email or username already exists.",
+      status: 'error',
+      message: 'A user with that email or username already exists.',
     };
   }
 
@@ -47,5 +45,5 @@ export const registerUser = async (
     },
   });
 
-  redirect("/login?registered=1");
+  redirect('/login?registered=1');
 };

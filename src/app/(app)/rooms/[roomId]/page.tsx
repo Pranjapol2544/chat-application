@@ -1,9 +1,9 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
-import { RoomConversation } from "@/features/messages/components/room-conversation";
-import { listRoomMessages } from "@/features/messages/server/list-room-messages";
-import { getRoomForUser } from "@/features/rooms/server/get-room-for-user";
-import { getRequiredSession } from "@/server/auth/session";
+import { RoomConversation } from '@/features/messages/components/room-conversation';
+import { listRoomMessages } from '@/features/messages/server/list-room-messages';
+import { getRoomForUser } from '@/features/rooms/server/get-room-for-user';
+import { getRequiredSession } from '@/server/auth/session';
 
 interface RoomPageProps {
   params: Promise<{

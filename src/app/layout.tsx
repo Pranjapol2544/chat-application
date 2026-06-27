@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import { Toaster } from "sonner";
+import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 
-import "./globals.css";
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Room Chat MVP",
-  description: "A Next.js room chat MVP with Prisma, Auth.js, and Socket.IO.",
+  title: 'Room Chat MVP',
+  description: 'A Next.js room chat MVP with Prisma, Auth.js, and Socket.IO.',
 };
 
 export default function RootLayout({

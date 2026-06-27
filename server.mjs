@@ -1,13 +1,13 @@
-import { createServer } from "node:http";
+import { createServer } from 'node:http';
 
-import next from "next";
-import { PrismaClient } from "@prisma/client";
-import { getToken } from "next-auth/jwt";
-import { Server } from "socket.io";
+import next from 'next';
+import { PrismaClient } from '@prisma/client';
+import { getToken } from 'next-auth/jwt';
+import { Server } from 'socket.io';
 
-const dev = process.env.NODE_ENV !== "production";
-const hostname = "0.0.0.0";
-const port = Number.parseInt(process.env.PORT ?? "3000", 10);
+const dev = process.env.NODE_ENV !== 'production';
+const hostname = '0.0.0.0';
+const port = Number.parseInt(process.env.PORT ?? '3000', 10);
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
@@ -22,7 +22,7 @@ const httpServer = createServer((req, res) => {
 });
 
 const io = new Server(httpServer, {
-  path: "/api/socket/io",
+  path: '/api/socket/io',
   cors: {
     origin: process.env.NEXTAUTH_URL ?? true,
     credentials: true,
@@ -31,18 +31,14 @@ const io = new Server(httpServer, {
 
 globalThis.__CHAT_IO__ = io;
 
-io.on("connection", async (socket) => {
+io.on('connection', async (socket) => {
   const token = await getToken({
     req: socket.request,
     secret: process.env.NEXTAUTH_SECRET,
   });
 
   const userId =
-    typeof token?.sub === "string"
-      ? token.sub
-      : typeof token?.id === "string"
-        ? token.id
-        : null;
+    typeof token?.sub === 'string' ? token.sub : typeof token?.id === 'string' ? token.id : null;
 
   if (!userId) {
     socket.disconnect(true);
@@ -51,12 +47,11 @@ io.on("connection", async (socket) => {
 
   socket.data.userId = userId;
 
-  socket.on("room:join", async (payload, ack) => {
-    const roomId =
-      payload && typeof payload.roomId === "string" ? payload.roomId : null;
+  socket.on('room:join', async (payload, ack) => {
+    const roomId = payload && typeof payload.roomId === 'string' ? payload.roomId : null;
 
     if (!roomId) {
-      ack?.({ ok: false, message: "Invalid room request." });
+      ack?.({ ok: false, message: 'Invalid room request.' });
       return;
     }
 
@@ -70,7 +65,7 @@ io.on("connection", async (socket) => {
     });
 
     if (!membership) {
-      ack?.({ ok: false, message: "You are not a member of this room." });
+      ack?.({ ok: false, message: 'You are not a member of this room.' });
       return;
     }
 
@@ -78,12 +73,11 @@ io.on("connection", async (socket) => {
     ack?.({ ok: true });
   });
 
-  socket.on("room:leave", (payload, ack) => {
-    const roomId =
-      payload && typeof payload.roomId === "string" ? payload.roomId : null;
+  socket.on('room:leave', (payload, ack) => {
+    const roomId = payload && typeof payload.roomId === 'string' ? payload.roomId : null;
 
     if (!roomId) {
-      ack?.({ ok: false, message: "Invalid room request." });
+      ack?.({ ok: false, message: 'Invalid room request.' });
       return;
     }
 
@@ -104,5 +98,5 @@ const closeServer = async () => {
   });
 };
 
-process.on("SIGINT", closeServer);
-process.on("SIGTERM", closeServer);
+process.on('SIGINT', closeServer);
+process.on('SIGTERM', closeServer);

@@ -1,7 +1,7 @@
-import { RoomSidebar } from "@/features/rooms/components/room-sidebar";
-import { listJoinableRooms } from "@/features/rooms/server/list-joinable-rooms";
-import { listUserRooms } from "@/features/rooms/server/list-user-rooms";
-import { getRequiredSession } from "@/server/auth/session";
+import { RoomSidebar } from '@/features/rooms/components/room-sidebar';
+import { listJoinableRooms } from '@/features/rooms/server/list-joinable-rooms';
+import { listUserRooms } from '@/features/rooms/server/list-user-rooms';
+import { getRequiredSession } from '@/server/auth/session';
 
 export default async function AppLayout({
   children,

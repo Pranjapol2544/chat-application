@@ -1,4 +1,4 @@
 interface:
-  display_name: "Chat App Architecture"
-  short_description: "Plan the structure for this chat app."
-  default_prompt: "Use $chat-app-architecture to propose or refine the architecture for this chat application."
+  display_name: 'Chat App Architecture'
+  short_description: 'Plan the structure for this chat app.'
+  default_prompt: 'Use $chat-app-architecture to propose or refine the architecture for this chat application.'

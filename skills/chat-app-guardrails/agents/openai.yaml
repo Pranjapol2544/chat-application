@@ -1,4 +1,4 @@
 interface:
-  display_name: "Chat App Guardrails"
-  short_description: "Apply code quality rules for this chat app."
-  default_prompt: "Use $chat-app-guardrails to review or guide implementation decisions for this chat application."
+  display_name: 'Chat App Guardrails'
+  short_description: 'Apply code quality rules for this chat app.'
+  default_prompt: 'Use $chat-app-guardrails to review or guide implementation decisions for this chat application.'

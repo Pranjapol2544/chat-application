@@ -1,39 +1,39 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 const USERS = [
   {
-    email: "alice@example.com",
-    username: "alice",
-    password: "password123",
+    email: 'alice@example.com',
+    username: 'alice',
+    password: 'password123',
   },
   {
-    email: "bob@example.com",
-    username: "bob",
-    password: "password123",
+    email: 'bob@example.com',
+    username: 'bob',
+    password: 'password123',
   },
   {
-    email: "charlie@example.com",
-    username: "charlie",
-    password: "password123",
+    email: 'charlie@example.com',
+    username: 'charlie',
+    password: 'password123',
   },
 ];
 
 const ROOMS = [
   {
-    name: "General",
-    members: ["alice", "bob", "charlie"],
+    name: 'General',
+    members: ['alice', 'bob', 'charlie'],
     messages: [
-      { sender: "alice", content: "Welcome to the general room." },
-      { sender: "bob", content: "Glad to be here." },
+      { sender: 'alice', content: 'Welcome to the general room.' },
+      { sender: 'bob', content: 'Glad to be here.' },
     ],
   },
   {
-    name: "Frontend",
-    members: ["alice", "charlie"],
-    messages: [{ sender: "charlie", content: "Let's build the chat UI next." }],
+    name: 'Frontend',
+    members: ['alice', 'charlie'],
+    messages: [{ sender: 'charlie', content: "Let's build the chat UI next." }],
   },
 ];
 
@@ -112,7 +112,7 @@ const main = async () => {
 
       const lastMessage = await prisma.message.findFirst({
         where: { roomId: savedRoom.id },
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
       });
 
       await prisma.room.update({

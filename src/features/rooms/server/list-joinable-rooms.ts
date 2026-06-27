@@ -1,9 +1,7 @@
-import type { AvailableRoom } from "@/features/rooms/types/available-room";
-import { prisma } from "@/server/db/prisma";
+import type { AvailableRoom } from '@/features/rooms/types/available-room';
+import { prisma } from '@/server/db/prisma';
 
-export const listJoinableRooms = async (
-  userId: string,
-): Promise<AvailableRoom[]> => {
+export const listJoinableRooms = async (userId: string): Promise<AvailableRoom[]> => {
   const rooms = await prisma.room.findMany({
     where: {
       NOT: {
@@ -15,7 +13,7 @@ export const listJoinableRooms = async (
       },
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
     include: {
       _count: {

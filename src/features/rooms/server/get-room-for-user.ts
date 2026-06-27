@@ -1,4 +1,4 @@
-import { prisma } from "@/server/db/prisma";
+import { prisma } from '@/server/db/prisma';
 
 export const getRoomForUser = async (userId: string, roomId: string) => {
   return prisma.room.findFirst({

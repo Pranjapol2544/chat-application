@@ -1,30 +1,28 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 import {
   createRoomSchema,
   type CreateRoomInput,
-} from "@/features/rooms/schemas/create-room.schema";
-import { getRequiredSession } from "@/server/auth/session";
-import { prisma } from "@/server/db/prisma";
+} from '@/features/rooms/schemas/create-room.schema';
+import { getRequiredSession } from '@/server/auth/session';
+import { prisma } from '@/server/db/prisma';
 
 export interface RoomActionResult {
-  status: "error";
+  status: 'error';
   message: string;
 }
 
-export const createRoom = async (
-  input: CreateRoomInput,
-): Promise<RoomActionResult | never> => {
+export const createRoom = async (input: CreateRoomInput): Promise<RoomActionResult | never> => {
   const session = await getRequiredSession();
   const result = createRoomSchema.safeParse(input);
 
   if (!result.success) {
     return {
-      status: "error",
-      message: result.error.issues[0]?.message ?? "Invalid room details.",
+      status: 'error',
+      message: result.error.issues[0]?.message ?? 'Invalid room details.',
     };
   }
 
@@ -36,8 +34,8 @@ export const createRoom = async (
 
   if (existingRoom) {
     return {
-      status: "error",
-      message: "A room with that name already exists.",
+      status: 'error',
+      message: 'A room with that name already exists.',
     };
   }
 
@@ -53,6 +51,6 @@ export const createRoom = async (
     },
   });
 
-  revalidatePath("/rooms");
+  revalidatePath('/rooms');
   redirect(`/rooms/${room.id}`);
 };

@@ -1,10 +1,10 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { LogoutButton } from "@/features/auth/components/logout-button";
-import { CreateRoomForm } from "@/features/rooms/components/create-room-form";
-import { JoinRoomButton } from "@/features/rooms/components/join-room-button";
-import type { AvailableRoom } from "@/features/rooms/types/available-room";
-import type { RoomSummary } from "@/features/rooms/types/room-summary";
+import { LogoutButton } from '@/features/auth/components/logout-button';
+import { CreateRoomForm } from '@/features/rooms/components/create-room-form';
+import { JoinRoomButton } from '@/features/rooms/components/join-room-button';
+import type { AvailableRoom } from '@/features/rooms/types/available-room';
+import type { RoomSummary } from '@/features/rooms/types/room-summary';
 
 interface RoomSidebarProps {
   availableRooms: AvailableRoom[];
@@ -21,9 +21,7 @@ export const RoomSidebar = (props: RoomSidebarProps) => {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
             Signed in as
           </p>
-          <h2 className="mt-2 text-xl font-semibold tracking-tight text-zinc-950">
-            {username}
-          </h2>
+          <h2 className="mt-2 text-xl font-semibold tracking-tight text-zinc-950">{username}</h2>
         </div>
         <LogoutButton />
       </div>
@@ -48,12 +46,10 @@ export const RoomSidebar = (props: RoomSidebarProps) => {
               >
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-medium text-zinc-900">{room.name}</span>
-                  <span className="text-xs text-zinc-500">
-                    {room.messageCount} msgs
-                  </span>
+                  <span className="text-xs text-zinc-500">{room.messageCount} msgs</span>
                 </div>
                 <p className="mt-1 text-xs text-zinc-500">
-                  {room.memberCount} member{room.memberCount === 1 ? "" : "s"}
+                  {room.memberCount} member{room.memberCount === 1 ? '' : 's'}
                 </p>
               </Link>
             ))
@@ -76,15 +72,12 @@ export const RoomSidebar = (props: RoomSidebarProps) => {
         <div className="space-y-3">
           {availableRooms.length ? (
             availableRooms.map((room) => (
-              <div
-                key={room.id}
-                className="rounded-2xl border border-zinc-200 px-4 py-3"
-              >
+              <div key={room.id} className="rounded-2xl border border-zinc-200 px-4 py-3">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="font-medium text-zinc-900">{room.name}</p>
                     <p className="mt-1 text-xs text-zinc-500">
-                      {room.memberCount} member{room.memberCount === 1 ? "" : "s"}
+                      {room.memberCount} member{room.memberCount === 1 ? '' : 's'}
                     </p>
                   </div>
                   <JoinRoomButton roomId={room.id} />

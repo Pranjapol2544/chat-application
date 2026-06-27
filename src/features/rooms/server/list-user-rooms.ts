@@ -1,5 +1,5 @@
-import type { RoomSummary } from "@/features/rooms/types/room-summary";
-import { prisma } from "@/server/db/prisma";
+import type { RoomSummary } from '@/features/rooms/types/room-summary';
+import { prisma } from '@/server/db/prisma';
 
 export const listUserRooms = async (userId: string): Promise<RoomSummary[]> => {
   const rooms = await prisma.room.findMany({
@@ -10,10 +10,7 @@ export const listUserRooms = async (userId: string): Promise<RoomSummary[]> => {
         },
       },
     },
-    orderBy: [
-      { lastMessageAt: "desc" },
-      { createdAt: "desc" },
-    ],
+    orderBy: [{ lastMessageAt: 'desc' }, { createdAt: 'desc' }],
     include: {
       _count: {
         select: {

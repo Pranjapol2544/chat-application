@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 
 import {
   sendMessageSchema,
   type SendMessageInput,
-} from "@/features/messages/schemas/send-message.schema";
-import { sendMessage } from "@/features/messages/server/send-message";
-import type { RoomMessage } from "@/features/messages/types/room-message";
-import { cn } from "@/lib/cn";
-import { getSocket } from "@/lib/socket";
+} from '@/features/messages/schemas/send-message.schema';
+import { sendMessage } from '@/features/messages/server/send-message';
+import type { RoomMessage } from '@/features/messages/types/room-message';
+import { cn } from '@/lib/cn';
+import { getSocket } from '@/lib/socket';
 
 interface RoomConversationProps {
   currentUserId: string;
@@ -21,9 +21,9 @@ interface RoomConversationProps {
 }
 
 const formatTimestamp = (value: string) => {
-  return new Intl.DateTimeFormat("en", {
-    hour: "2-digit",
-    minute: "2-digit",
+  return new Intl.DateTimeFormat('en', {
+    hour: '2-digit',
+    minute: '2-digit',
   }).format(new Date(value));
 };
 
@@ -40,7 +40,7 @@ const upsertMessages = (messages: RoomMessage[], nextMessage: RoomMessage) => {
 export const RoomConversation = (props: RoomConversationProps) => {
   const { currentUserId, initialMessages, roomId, roomName } = props;
   const [messages, setMessages] = useState(initialMessages);
-  const [rootError, setRootError] = useState("");
+  const [rootError, setRootError] = useState('');
   const [isPending, startTransition] = useTransition();
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
   const socket = useMemo(() => getSocket(), []);
@@ -53,18 +53,18 @@ export const RoomConversation = (props: RoomConversationProps) => {
     resolver: zodResolver(sendMessageSchema),
     defaultValues: {
       roomId,
-      content: "",
+      content: '',
     },
   });
 
   useEffect(() => {
-    endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
+    endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   useEffect(() => {
     socket.connect();
 
-    socket.emit("room:join", { roomId });
+    socket.emit('room:join', { roomId });
 
     const handleMessageCreated = (message: RoomMessage) => {
       if (message.roomId !== roomId) {
@@ -74,44 +74,38 @@ export const RoomConversation = (props: RoomConversationProps) => {
       setMessages((currentMessages) => upsertMessages(currentMessages, message));
     };
 
-    socket.on("message:created", handleMessageCreated);
+    socket.on('message:created', handleMessageCreated);
 
     return () => {
-      socket.emit("room:leave", { roomId });
-      socket.off("message:created", handleMessageCreated);
+      socket.emit('room:leave', { roomId });
+      socket.off('message:created', handleMessageCreated);
     };
   }, [roomId, socket]);
 
   const onSubmit = (values: SendMessageInput) => {
-    setRootError("");
+    setRootError('');
 
     startTransition(async () => {
       const response = await sendMessage(values);
 
-      if (response.status === "error") {
-        setRootError(response.message ?? "Unable to send your message.");
+      if (response.status === 'error') {
+        setRootError(response.message ?? 'Unable to send your message.');
         return;
       }
 
       if (response.payload) {
-        setMessages((currentMessages) =>
-          upsertMessages(currentMessages, response.payload!),
-        );
+        setMessages((currentMessages) => upsertMessages(currentMessages, response.payload!));
       }
 
-      reset({ roomId, content: "" });
+      reset({ roomId, content: '' });
     });
   };
 
   return (
     <section className="flex h-full flex-col rounded-[2rem] border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
       <header className="border-b border-zinc-200 px-8 py-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
-          Room
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950">
-          {roomName}
-        </h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Room</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950">{roomName}</h1>
       </header>
 
       <div className="flex-1 space-y-4 overflow-y-auto px-6 py-6 md:px-8">
@@ -122,17 +116,14 @@ export const RoomConversation = (props: RoomConversationProps) => {
             return (
               <article
                 key={message.id}
-                className={cn(
-                  "flex",
-                  isCurrentUser ? "justify-end" : "justify-start",
-                )}
+                className={cn('flex', isCurrentUser ? 'justify-end' : 'justify-start')}
               >
                 <div
                   className={cn(
-                    "max-w-xl rounded-3xl px-4 py-3 shadow-sm",
+                    'max-w-xl rounded-3xl px-4 py-3 shadow-sm',
                     isCurrentUser
-                      ? "bg-zinc-950 text-white"
-                      : "border border-zinc-200 bg-zinc-50 text-zinc-950",
+                      ? 'bg-zinc-950 text-white'
+                      : 'border border-zinc-200 bg-zinc-50 text-zinc-950',
                   )}
                 >
                   <div className="mb-2 flex items-center gap-2 text-xs font-medium opacity-80">
@@ -140,9 +131,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
                     <span>•</span>
                     <span>{formatTimestamp(message.createdAt)}</span>
                   </div>
-                  <p className="whitespace-pre-wrap text-sm leading-6">
-                    {message.content}
-                  </p>
+                  <p className="whitespace-pre-wrap text-sm leading-6">{message.content}</p>
                 </div>
               </article>
             );
@@ -166,24 +155,20 @@ export const RoomConversation = (props: RoomConversationProps) => {
           className="flex flex-col gap-3 md:flex-row md:items-end"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <input {...register("roomId")} type="hidden" value={roomId} />
+          <input {...register('roomId')} type="hidden" value={roomId} />
           <label className="flex-1 space-y-2">
-            <span className="text-sm font-medium text-zinc-700">
-              Message
-            </span>
+            <span className="text-sm font-medium text-zinc-700">Message</span>
             <textarea
-              {...register("content")}
+              {...register('content')}
               rows={3}
               className={cn(
-                "w-full resize-none rounded-3xl border bg-white px-4 py-3 text-sm leading-6 text-zinc-950 outline-none transition focus:border-zinc-950",
-                errors.content ? "border-rose-300" : "border-zinc-200",
+                'w-full resize-none rounded-3xl border bg-white px-4 py-3 text-sm leading-6 text-zinc-950 outline-none transition focus:border-zinc-950',
+                errors.content ? 'border-rose-300' : 'border-zinc-200',
               )}
               placeholder="Write a message to the room..."
             />
             {errors.content ? (
-              <span className="text-xs text-rose-600">
-                {errors.content.message}
-              </span>
+              <span className="text-xs text-rose-600">{errors.content.message}</span>
             ) : null}
           </label>
 
@@ -192,7 +177,7 @@ export const RoomConversation = (props: RoomConversationProps) => {
             disabled={isPending}
             className="rounded-3xl bg-zinc-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isPending ? "Sending..." : "Send message"}
+            {isPending ? 'Sending...' : 'Send message'}
           </button>
         </form>
       </div>
