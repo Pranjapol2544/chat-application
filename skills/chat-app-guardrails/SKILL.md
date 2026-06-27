@@ -84,6 +84,17 @@ Read [references/performance-security.md](references/performance-security.md) wh
 - Destructure props in the parameter list only when it improves readability; otherwise keep `props` intact.
 - Keep files small enough that the component contract, markup, and nearby helper types remain easy to scan together.
 
+## Localization
+
+- Do not hardcode user-facing copy inside components, pages, server actions, or route handlers when the text is part of the product UI.
+- Prefer feature-based locale organization such as `src/locales/auth/en.ts` and `src/locales/auth/th.ts` over language-first trees such as `src/locales/en/auth.ts`.
+- Use stable dotted translation keys such as `auth.login.title`, `auth.login.submit`, `rooms.create.title`, and `messages.empty.state`.
+- Keep translation keys consistent across locales; only values should differ between `en`, `th`, or other locale files.
+- Localize validation, empty-state, and user-visible error messages when they surface in the UI.
+- Keep domain models and stored data language-neutral unless multilingual content is a product requirement.
+- Build components so longer translations do not break layout, truncation, or button sizing unexpectedly.
+- Prefer locale-aware formatting for dates, times, and relative timestamps when they are shown to users.
+
 ## Naming Conventions
 
 - Name React components with `PascalCase`, such as `RoomList` or `MessageComposer`.

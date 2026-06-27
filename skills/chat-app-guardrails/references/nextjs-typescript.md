@@ -52,6 +52,13 @@ export const MyComponent = (props: MyComponentProps) => {
 - Boolean flags: `isXxx`, `hasXxx`, `canXxx`
 - File names: `kebab-case`
 
+## Localization Patterns
+
+- Prefer feature-based locale files such as `src/locales/auth/en.ts` and `src/locales/auth/th.ts`.
+- Use stable dotted keys such as `auth.login.title` instead of local-only labels that can collide across features.
+- Avoid hardcoding product copy in components when the UI is expected to support multiple languages.
+- Keep translation objects `as const` when helpful so key access stays typed and predictable.
+
 ## Compiler Safety Flags
 
 - `noUncheckedIndexedAccess` helps surface missing map or record entries.
